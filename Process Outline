@@ -1,0 +1,4 @@
+1. Open text file [ fopen() ]
+2. Read bytes from text file and sum them until we read a newline char [ fread() ]
+3. Repeat step 2 for the next line.
+4. Subtract the result from 2 from the result from 3 and return.
