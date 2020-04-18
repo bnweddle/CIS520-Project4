@@ -1,0 +1,17 @@
+int i;
+sum_1 = 0;
+sum_2 = 0;
+diff;
+char *line;
+
+line = readline();
+for( i = 0; i < strlen(line); i++ ){
+  sum_1 = sum_1 + line[i];
+}
+
+line = readline();
+for( i = 0; i < strlen(line); i++ ){
+  sum_2 = sum_2 + line[i];
+}
+
+diff = sum_2 - sum_1;
