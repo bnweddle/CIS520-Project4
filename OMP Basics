@@ -1,0 +1,13 @@
+https://www.openmp.org/wp-content/uploads/OpenMP3.0-SummarySpec.pdf
+
+#pragma omp parallel
+the parallel construct forms a team of threads and starts parallel execution
+
+#pragma omp critical
+The critical construct restricts execution of the associated structured block to a single thread at a time
+
+#pragma omp <construct> private(list)
+Declares one or more list items to be private to a task.
+
+int omp_get_thread_num(void)
+Returns the ID of the encountering thread where ID ranges from zero to the size of the team minus 1
