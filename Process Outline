@@ -1,0 +1,20 @@
+n = 0
+lineA = char[]
+lineB = char[]
+resultQueue = int[]
+
+-- reader thread --
+1. Open data file for reading
+2. Read 2 lines and copy to lineA and lineB
+3. Pipe lineA and lineB to worker thread for processing, increment n
+4. Read next line and copy to lineA/lineB (alternating)
+5. Goto step 3
+
+-- worker threads --
+1. Sum up bytes in lineA and lineB
+2. Subtract lineB from lineA
+3. Add result to queue in position n
+
+-- writer thread --
+1. Pull result from lowest position in result queue
+2. Append result to output file
