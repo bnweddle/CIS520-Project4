@@ -1,6 +1,9 @@
 // Should read the number lines of the wiki_dump.txt when you pass
 // in the file path for where it is located
 
+// gcc test.c -o testing to create program
+// ./testing "homes/dan/625/wiki_dump.txt"
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -27,7 +30,7 @@ int countlines(char *filename)
   int lines=0;
 
   if (fp == NULL)
-      return 0;
+      printf ("Error with File"); // returns this
   lines++;
 
   while ((ch = fgetc(fp)) != EOF)
