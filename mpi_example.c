@@ -81,6 +81,7 @@ int main(int argc, char **argv) {
     int ierr;
     const int overlap = 100;
 
+    // MUST be called at the beginning!
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -110,6 +111,7 @@ int main(int argc, char **argv) {
     MPI_File_close(&in);
     MPI_File_close(&out);
 
+    // MUST  be called at the end!
     MPI_Finalize();
     return 0;
 }

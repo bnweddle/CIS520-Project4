@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
-#define MAX_THREADS 4
-#define BUFFSIZE 12
+#define MAX_THREADS 10
+#define BUFFSIZE 100
 //define FILENAME "a.txt"
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
