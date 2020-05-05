@@ -6,9 +6,21 @@
 //define FILENAME "a.txt"
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
-int *sums = malloc(BUFFSIZE * sizeof(int));
+int sums[BUFFSIZE];
 int count = 0;
 int j = 0;
+
+
+void* FindSums(void* arg)
+{
+    for(j = 0; j < count; j++)
+    {
+              printf("line %d-%d: %d\n",j,j+1,(sums[j+1]-sums[j]));
+    }
+
+    pthread_exit(NULL);
+
+}
 
 
 int main()
@@ -57,7 +69,7 @@ int main()
        }
        
      for (t = 0; t < MAX_THREADS; t++ ){
-        rc = pthread_create(&threads[t], &attr, &FindSums, (void *)t);
+        rc = pthread_create(&threads[t], &attr, FindSums, (void *)&t);
         if (rc)
         {
           printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -76,19 +88,9 @@ int main()
         exit(-1);
       }
     }
-   FindSums(count, j, sums);
+
 
       
    fclose(fp);
    return 0;
-}
-
-void *FindSums(void *id)
-{   
-    for(j = 0; j < count; j++) 
-    {
-	      printf("tid:%d line %d-%d: %d\n",omp_get_thread_num(),j,j+1,(sums[j+1]-sums[j]));
-    }
-    
-    pthread_exit(NULL);
 }
