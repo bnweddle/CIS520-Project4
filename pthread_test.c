@@ -52,7 +52,7 @@ int main()
        }
        
      for (t = 0; t < MAX_THREADS; t++ ){
-        rc = pthread_create(&threads[t], &attr, FindSums(count), (void *)t);
+        rc = pthread_create(&threads[t], &attr, FindSums(count, j, sums), (void *)t);
         if (rc)
         {
           printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -64,22 +64,22 @@ int main()
     pthread_attr_destroy(&attr);
     for(t=0; t< MAX_THREADS; t++)
     {
-      rc = pthread_join(threads[i], &status);
+      rc = pthread_join(threads[t], &status);
       if (rc)
       {
         printf("ERROR; return code from pthread_join() is %d\n", rc);
         exit(-1);
       }
     }
-   FindSums(count);
+   FindSums(count, j, sums);
 
       
    fclose(fp);
    return 0;
 }
 
-public void FindSums(int count)
-{
+void FindSums(int count, int j, int sums[])
+{   
     for(j = 0; j < count; j++) 
     {
 	      printf("tid:%d line %d-%d: %d\n",omp_get_thread_num(),j,j+1,(sums[j+1]-sums[j]));
