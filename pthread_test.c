@@ -69,7 +69,7 @@ int main()
        }
        
      for (t = 0; t < MAX_THREADS; t++ ){
-        rc = pthread_create(&threads[t], &attr, FindSums, (void *)&t);
+        rc = pthread_create(&threads[t], &attr, FindSums, (void *)t);
         if (rc)
         {
           printf("ERROR; return code from pthread_create() is %d\n", rc);
