@@ -15,6 +15,9 @@ int main()
     int *sums = malloc(BUFFSIZE * sizeof(int)); 
     int i = 0;
     int j = 0;
+    int tid = 0; 
+    int start = 0;
+    int end = 0;
 
     omp_set_num_threads(MAX_THREADS);
 
@@ -43,8 +46,13 @@ int main()
 	  count++;
 	  sum = 0;
        }
-       #pragma omp parallel
+
+
+       #pragma omp parallel private(tid, start, end)
        {
+          tid = omp_get_thread_num();
+          start = tid * (BUFFSIZE / MAX_THREADS);
+          end = start + (BUFFSIZE / MAX_THREADS);
        #pragma omp for ordered
        for(j = 0; j < count; j++) {
 	#pragma omp ordered

@@ -1,30 +1,30 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <pthread.h>
-#define MAX_THREADS 10
-#define BUFFSIZE 100
-//define FILENAME "a.txt"
-#define FILENAME "/homes/dan/625/wiki_dump.txt"
+#define MAX_THREADS 4
+#define BUFFSIZE 12 
+#define FILENAME "a.txt"
+//#define FILENAME "/homes/dan/625/wiki_dump.txt"
 
 int sums[BUFFSIZE];
 int count = 0;
-int j = 0;
 
-
-void* FindSums(void *arg)
-{
-    int id = (int)(arg);
-    int start = id * ( BUFFSIZE / MAX_THREADS);
+void *FindSums(void *arg)
+{   
+    int j;
+    int id = (uintptr_t)arg;
+    int start = id  * (BUFFSIZE / MAX_THREADS);
     int end = start + (BUFFSIZE /MAX_THREADS);
 
     
     // j needs to start where thread left off from
-    for(j = start; j < end; j++)
+    for(j = start; j <  end; j++)
     {
         printf("tid-%d  line %d-%d: %d\n", pthread_self(), j,j+1,(sums[j+1]-sums[j]));
     }
 
-    pthread_exit(NULL);
+    pthread_exit((void*) arg);
 
 }
 
@@ -41,7 +41,11 @@ int main()
     
     int t, rc;
     pthread_t threads[MAX_THREADS];
-
+    pthread_attr_t attr;
+    void *status;
+    /* Initialize and set thread detached attribute */
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     
 
     // Open the file
@@ -71,7 +75,7 @@ int main()
        }
        
      for (t = 0; t < MAX_THREADS; t++ ){
-        rc = pthread_create(&threads[t], NULL, FindSums, (void *)t);
+        rc = pthread_create(&threads[t], &attr, FindSums, (void *)(uintptr_t)t);
         if (rc)
         {
           printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -79,18 +83,17 @@ int main()
         }
     }
 
+    pthread_attr_destroy(&attr);
     for(t=0; t< MAX_THREADS; t++)
     {
-      rc = pthread_join(threads[t], NULL);
+      rc = pthread_join(threads[t], &status);
       if (rc)
       {
         printf("ERROR; return code from pthread_join() is %d\n", rc);
         exit(-1);
       }
-    }
+    } 
 
-
-      
    fclose(fp);
    return 0;
 }

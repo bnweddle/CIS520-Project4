@@ -50,6 +50,8 @@ void ReadFile()
 
 void FindSums(void *rank)
 {
+    
+    printf("Reached Find Sums\n");
     int id = (int)(rank);
     int start = id * (BUFFSIZE / MAX_THREADS);
     int end = start + (BUFFSIZE /MAX_THREADS);
@@ -86,11 +88,15 @@ int main(int argc, char* argv[])
        ReadFile();
     }
     
+    printf("Reached B CAST\n");
     MPI_Bcast(sums, BUFFSIZE, MPI_CHAR, 0, MPI_COMM_WORLD);
+    printf("Reached over BCAST\n");
     FindSums(&rank);
     
-    // Need to call MPI_Reduce?
-    
+    // Need to call MPI_Reduce?i
+    //MPI_Reduce(sums, sums, BUFFSIZE, MPI_CHAR, MPI_SUM, 0, MPI_COMM_WORLD);   
+
+ 
     MPI_Finalize(); 
     return 0;
 }
