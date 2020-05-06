@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <omp.h>
-
-#define MAX_THREADS 4
+#define MAX_THREADS 32 
 #define NUMLINES 1000000
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
