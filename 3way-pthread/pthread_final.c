@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <pthread.h>
-#define MAX_THREADS 32
-#define BUFFSIZE 1000000 
+#define MAX_THREADS 10 
+#define BUFFSIZE 500 
 //#define FILENAME "a.txt"
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
@@ -22,6 +22,7 @@ void *FindSums(void *arg)
     for(j = start; j <  end; j++)
     {
         printf("tid-%d  line %d-%d: %d\n", pthread_self(), j,j+1,(sums[j+1]-sums[j]));
+       // sleep(0.001);
     }
 
     pthread_exit((void*) arg);
@@ -68,7 +69,7 @@ int main()
 	    sum += (int)c;
 	    c = getc(fp);
           }
-	  printf("i:%d sum:%d\n",i,sum);
+	  printf("line:%d sum:%d\n",i,sum);
 	  sums[i] = sum;
 	  count++;
 	  sum = 0;

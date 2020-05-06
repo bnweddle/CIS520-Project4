@@ -2,15 +2,13 @@
 #include <stdio.h>
 #include <mpi.h>
 //#define MAX_THREADS 4
-#define BUFFSIZE 12
+#define BUFFSIZE 12 
 //define FILENAME "a.txt"
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
 int MAX_THREADS;
 int sums[BUFFSIZE];
 int count = 0;
-int j = 0;
-
 
 void ReadFile()
 {
@@ -48,27 +46,30 @@ void ReadFile()
    fclose(fp);
 }
 
-void FindSums(void *rank)
+void FindSums(int *rank)
 {
-    
-    printf("Reached Find Sums\n");
-    int id = (int)(rank);
+    int j;
+    int dif = BUFFSIZE / MAX_THREADS;
+    printf("difference %d:\n", dif);
+    int id = *rank;
     int start = id * (BUFFSIZE / MAX_THREADS);
-    int end = start + (BUFFSIZE /MAX_THREADS);
-    
+    int end = start + (BUFFSIZE / MAX_THREADS);
+    printf("Before for loop\n");
     // j needs to start where thread left off from
     for(j = start; j < end; j++)
     {
         printf("tid-%d  line %d-%d: %d\n", id, j,j+1,(sums[j+1]-sums[j]));
     }
+   
+    printf("After for loop\n: start-%d\n, end-%d\n, rank%d\n, BUFFSIZE%d\n, MAX_THREADS%d\n", start, end, id, BUFFSIZE, MAX_THREADS);
 }
 
 
 int main(int argc, char* argv[])
 {  
     int m, rc;
-	  int numtasks, rank;
-	  MPI_Status Status;
+    int numtasks, rank;
+    MPI_Status Status;
 
     rc = MPI_Init(&argc,&argv);
     if (rc != MPI_SUCCESS) {
@@ -76,10 +77,10 @@ int main(int argc, char* argv[])
       MPI_Abort(MPI_COMM_WORLD, rc);
     }
 
-    MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
-    MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+    printf("rank before MPI CALL: %d\n", rank);
 
-    MAX_THREADS = numtasks;
+    MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
+    MPI_Comm_rank(MPI_COMM_WORLD,&rank); 
     
     printf("size = %d rank = %d\n", numtasks, rank);
     fflush(stdout);
@@ -87,12 +88,26 @@ int main(int argc, char* argv[])
     if(rank == 0){
        ReadFile();
     }
+
+    fflush(stdout);
+    
+    MAX_THREADS = numtasks;
+    printf("MAX_THREADS: %d\n", MAX_THREADS);
+    
     
     printf("Reached B CAST\n");
-    MPI_Bcast(sums, BUFFSIZE, MPI_CHAR, 0, MPI_COMM_WORLD);
+    MPI_Bcast(sums, BUFFSIZE, MPI_INT, 0, MPI_COMM_WORLD);
     printf("Reached over BCAST\n");
     FindSums(&rank);
-    
+
+    int size = BUFFSIZE;
+
+    for(m = 0; m < numtasks; m++)
+    {
+      MPI_Send(&size, 1, MPI_CHAR, m, BUFFSIZE, MPI_COMM_WORLD); 
+    }
+   
+    //I_Send(BUFFSIZE, numtasks, MPI_CHAR,&rank,0, MPI_COMM_WORLD);
     // Need to call MPI_Reduce?i
     //MPI_Reduce(sums, sums, BUFFSIZE, MPI_CHAR, MPI_SUM, 0, MPI_COMM_WORLD);   
 
