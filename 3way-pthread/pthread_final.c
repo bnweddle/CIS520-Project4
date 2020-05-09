@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <sys/time.h>
 #include <pthread.h>
-#define MAX_THREADS 10 
-#define BUFFSIZE 500 
+#define MAX_THREADS 32 
+#define BUFFSIZE 1000000 
 //#define FILENAME "a.txt"
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
