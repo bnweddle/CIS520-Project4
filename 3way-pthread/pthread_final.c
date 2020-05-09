@@ -75,7 +75,7 @@ int main()
 	    sum += (int)c;
 	    c = getc(fp);
           }
-	  printf("line:%d sum:%d\n",i,sum);
+	 // printf("line:%d sum:%d\n",i,sum);
 	  sums[i] = sum;
 	  count++;
 	  sum = 0;
