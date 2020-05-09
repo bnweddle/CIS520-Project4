@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <omp.h>
 #define MAX_THREADS 32 
-#define NUMLINES 1000000
+#define NUMLINES 100
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
 int main() {
