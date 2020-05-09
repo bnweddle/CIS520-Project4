@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/time.h>
 #include <pthread.h>
 #define MAX_THREADS 10 
 #define BUFFSIZE 500 
@@ -32,6 +33,10 @@ void *FindSums(void *arg)
 
 int main()
 {
+    struct timeval start, end;
+    double elapsedTime;
+    int numSlots, myVersion = 2; // pthreads = 1, openmp = 2, mpi = 3
+    
     FILE *fp;
    // int count = 0;  // Line counter (result)
     char c = 0;  // To store a character read from file
@@ -48,7 +53,8 @@ int main()
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     
-
+    
+    gettimeofday(&start, NULL);
     // Open the file
     fp = fopen(FILENAME, "r");
 
@@ -94,6 +100,12 @@ int main()
         exit(-1);
       }
     } 
+
+   gettimeofday(&end, NULL);
+
+   elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0; //sec to ms
+   elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0; // us to ms
+   printf("DATA, %d, %s, %f, %d\n", myVersion, getenv("NSLOTS"),  elapsedTime, MAX_THREADS );
 
    fclose(fp);
    return 0;

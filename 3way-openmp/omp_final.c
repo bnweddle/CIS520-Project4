@@ -1,11 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
 #include <omp.h>
 #define MAX_THREADS 32 
 #define NUMLINES 1000000
 #define FILENAME "/homes/dan/625/wiki_dump.txt"
 
 int main() {
+  struct timeval start, end;
+  double elapsedTime;
+  int numSlots, myVersion = 1; // omp = 1, pthread = 2, mpi = 3
+ 
+ 
   FILE * fp;
   int count = 0; // tracks total number of lines read
   char c = 0; // stores the char read from file
@@ -13,6 +19,7 @@ int main() {
   int * sums = malloc(NUMLINES * sizeof(int)); // a buffer to hold line sums
   int i = 0;
   int j = 0;
+
 
   omp_set_num_threads(MAX_THREADS);
   
@@ -26,6 +33,7 @@ int main() {
   }
   printf("File opened successfully\n");
   
+  gettimeofday(&start, NULL);
   // loop which reads characters from the file, stopping when EOF is reached or buffer is full
   while(c = getc(fp), c != EOF && i < NUMLINES) {
     if (c == '\n') {
@@ -47,6 +55,13 @@ int main() {
     }
   }
 
+  gettimeofday(&end, NULL);
+
+
+  elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0; //sec to ms
+  elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0; // us to ms
+  printf("DATA, %d, %s, %f, %d\n", myVersion, getenv("NSLOTS"),  elapsedTime, MAX_THREADS);
+  
   fclose(fp);
   return 0;
 }
