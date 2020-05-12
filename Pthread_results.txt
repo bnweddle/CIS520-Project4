@@ -1,0 +1,24 @@
+Pthreads results Core: 1, 2, 16.2
+
+PTHREADS: Core 1
+   Threads 1: 16088.589 
+   Threads 2: 16169.847
+   Threads 4: 17047.464
+   Threads 8: 16571.219
+  Threads 16: 16059.787
+  Threads 32: 16938.594
+          Core 2:
+   Threads 1:  15040.830
+   Threads 2:  15102.817
+   Threads 4:  15399.775
+   Threads 8:  15621.84
+  Threads 16:  14566.352
+  Threads 32:  14734.625
+  
+         Core 16: 2 Nodes
+    Threads 1: 13723.885
+	Threads 2: 14003.610
+	Threads 4: 14431.968
+	Threads 8: 15037.787
+   Threads 16: 13735.689
+   Threads 32: 14181.025
