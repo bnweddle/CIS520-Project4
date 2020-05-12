@@ -1,0 +1,28 @@
+PTHREAD:
+	4 core, 1 node:
+	EXAMPLE RUN FOR 8 THREADS:
+	sbatch --time=5 --mem-per-cpu=512M --cpus-per-task=4 --ntasks=1 --nodes=1 --constraint=elves ./script8.sh
+		1 thread: 15454.845 ms
+		2 threads: 14776.748 ms
+		4 threads: 15590.479 ms
+		8 threads: 15643.283 ms
+		16 threads: 13899.864 ms
+		32 threads: 17922.324 ms
+	8 core, 1 node:
+	EXAMPLE RUN FOR 8 THREADS:
+	sbatch --time=5 --mem-per-cpu=512M --cpus-per-task=8 --ntasks=1 --nodes=1 --constraint=elves ./script8.sh
+		1 thread: 14206.231 ms
+		2 threads: 13387.157 ms
+		4 threads: 14258.153 ms
+		8 threads: 13316.115 ms
+		16 threads: 14581.026 ms
+		32 threads: 13437.882 ms
+	16 core, 1 node:
+	EXAMPLE RUN FOR 8 THREADS:
+	sbatch --time=5 --mem-per-cpu=512M --cpus-per-task=16 --ntasks=1 --nodes=1 --constraint=elves ./script8.sh
+		1 thread: 13646.415 ms
+		2 threads: 13809.272 ms
+		4 threads: 13894.574 ms
+		8 threads: 13740.383 ms
+		16 threads: 13916.952 ms
+		32 threads: 13945.842 ms
