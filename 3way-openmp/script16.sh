@@ -1,3 +1,3 @@
 #!/bin/sh
 #SBATCH --output=omp_16.out
-srun ./omp_1
+srun ./omp_16
