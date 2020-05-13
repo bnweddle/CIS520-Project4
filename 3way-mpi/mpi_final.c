@@ -10,7 +10,16 @@
 int MAX_THREADS;
 int sums[BUFFSIZE];
 int dif[BUFFSIZE];
+int difCal[BUFFSIZE];
 //int count = 0;
+
+void SetArrayToZero()
+{
+   int x;
+   for(x = 0; x < BUFFSIZE; x++)
+      difCal[x] = 1; 
+}
+
 
 void ReadFile()
 {
@@ -50,7 +59,7 @@ void ReadFile()
 
 void FindSums(int *rank)
 {
-    
+     
     int j;
     int id = *rank;
     int start = id * (BUFFSIZE / MAX_THREADS);
@@ -59,9 +68,8 @@ void FindSums(int *rank)
     for(j = start; j < end; j++)
     {  
        dif[j] = sums[j+1]-sums[j];
-       //printf("%d tid:", rank);
+    
     }
-   
 }
 
 
@@ -91,28 +99,38 @@ int main(int argc, char* argv[])
     
     if(rank == 0){
        ReadFile();
+       SetArrayToZero();
     }
     
     MAX_THREADS = numtasks; 
     
     MPI_Bcast(sums, BUFFSIZE, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(difCal, BUFFSIZE, MPI_INT, 0, MPI_COMM_WORLD);
     FindSums(&rank);
-   
-    gettimeofday(&end, NULL);
 
-    MPI_Reduce(sums, dif, BUFFSIZE, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
- 
-    MPI_Finalize(); 
+    //SetArrayToZero();
+    //printf("BEFORE %d:\n", dif[5]);
     
-    if(rank == 0){
-        int x = 0;
-         for(x = 0; x < BUFFSIZE; x++) {
-            printf("%d-%d: %d\n",x,x+1,(dif[x+1]-dif[x]));
-         }
-      
+
+    MPI_Reduce(dif, difCal, BUFFSIZE, MPI_INT, MPI_PROD, 0 , MPI_COMM_WORLD);
+    
+    //SetArrayToZero();
+    //printf("AFTER %d:\n", dif[5]);
+
+    int x = 0;
+         
+    for(x = 0; x < BUFFSIZE; x++) {
+       if(dif[x] != 0)
+         printf("%d-%d: %d\n",x,x+1, dif[x]);
+     }
+
+     gettimeofday(&end, NULL);
+
+     MPI_Finalize();
+     if(rank == 0) {     
    	elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0; //sec to ms
     	elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0; // us to ms
     	printf("DATA, %d, %s, %f, %d\n", myVersion, getenv("SLURM_CPUS_ON_NODE"),  elapsedTime, MAX_THREADS);
-     } 
+      } 
    return 0;
 }
