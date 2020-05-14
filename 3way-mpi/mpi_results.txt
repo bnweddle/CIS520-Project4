@@ -1,0 +1,8 @@
+1 core, 1 node - 39048.937
+2 cores, 1 node - 38613.447
+4 cores, 1 node - 36648.339
+8 cores, 1 node - 37586.933
+16 cores, 1 node - 38702.484
+16 cores, 2 nodes - 38883.399
+32 cores, 2 nodes - 43460.442
+64 cores, 4 nodes - 45356.267
